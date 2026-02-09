@@ -5,16 +5,15 @@ PREPROCESSOR_FLAGS ?=
 # -DDEBUGSTATS -DFORCE_INTERNODE_ONLY -DAGGR_intra=524288 -DAGGR=524288
 PREPROCESSOR_FLAGS += -DCCUTILS_ENABLE_MPI -DCCUTILS_NO_JSON
 
-all: graph500_reference_bfs_sssp graph500_reference_bfs 
-#graph500_custom_bfs graph500_custom_bfs_sssp
+all: graph500_reference_bfs
 
 GENERATOR_SOURCES = ../generator/graph_generator.c ../generator/make_graph.c ../generator/splittable_mrg.c ../generator/utils.c
 SOURCES = main.c utils.c validate.c ../aml/aml.c
 HEADERS = common.h csr_reference.h bitmap_reference.h
-CCUTILS = ../ccutils/install/include 
+CCUTILS = ../../../common/ccutils/install/include 
 
 $(CCUTILS):
-	cd ../ccutils && \
+	cd ../../../common/ccutils && \
 	cmake -S . -B build -DCCUTILS_ENABLE_MPI=ON && \
 	cmake --build build && \
 	cmake --install build --prefix ./install
@@ -35,4 +34,4 @@ clean:
 	-rm -f graph500_*
 
 deep_clean: clean
-	-rm -rf ../ccutils/install ../ccutils/build;
+	-rm -rf ../../../common/ccutils//install ../../../common/ccutils/build;
