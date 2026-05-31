@@ -10,13 +10,7 @@ all: graph500_reference_bfs
 GENERATOR_SOURCES = ../generator/graph_generator.c ../generator/make_graph.c ../generator/splittable_mrg.c ../generator/utils.c
 SOURCES = main.c utils.c validate.c ../aml/aml.c
 HEADERS = common.h csr_reference.h bitmap_reference.h
-CCUTILS = ../../../common/ccutils/install/include 
-
-$(CCUTILS):
-	cd ../../../common/ccutils && \
-	cmake -S . -B build -DCCUTILS_ENABLE_MPI=ON && \
-	cmake --build build && \
-	cmake --install build --prefix ./install
+CCUTILS = $(CCUTILS_INCLUDE)
 
 graph500_reference_bfs_sssp: bfs_reference.c $(SOURCES) $(HEADERS) $(GENERATOR_SOURCES) csr_reference.c sssp_reference.c
 	$(MPICC) $(CFLAGS) -DSSSP $(LDFLAGS) $(PREPROCESSOR_FLAGS) -o graph500_reference_bfs_sssp bfs_reference.c sssp_reference.c csr_reference.c $(SOURCES) $(GENERATOR_SOURCES) -lm
@@ -32,6 +26,3 @@ graph500_custom_bfs_sssp: bfs_custom.c sssp_custom.c $(SOURCES) $(HEADERS) $(GEN
 
 clean:
 	-rm -f graph500_*
-
-deep_clean: clean
-	-rm -rf ../../../common/ccutils//install ../../../common/ccutils/build;
